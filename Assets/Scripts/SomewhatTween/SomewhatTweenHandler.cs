@@ -1,12 +1,14 @@
+using System;
+using System.Collections;
 using UnityEngine;
 
 namespace SomewhatTween
 {
-    public class SomewhatTweenHandler : MonoBehaviour
+    internal class SomewhatTweenHandler : MonoBehaviour
     {
         private static SomewhatTweenHandler _instance;
 
-        public static SomewhatTweenHandler Instance
+        internal static SomewhatTweenHandler Instance
         {
             get
             {
@@ -24,6 +26,24 @@ namespace SomewhatTween
         {
             _instance = this;
             DontDestroyOnLoad(gameObject);
+        }
+        
+        internal static IEnumerator HandleTween(SomewhatTweener tweener, Action<float> applyAction, float duration)
+        {
+            tweener.FireOnBegin();
+            var endOfFrame = new WaitForEndOfFrame();
+            var timer = 0.0f;
+
+            while (timer < duration)
+            {
+                timer += Time.deltaTime;
+                var evaluatedInterpolator = tweener.GetInterpolator(timer / duration);
+                applyAction.Invoke(evaluatedInterpolator);
+                yield return endOfFrame;
+            }
+            
+            applyAction.Invoke(1);
+            tweener.FireOnComplete();
         }
     }
 }
