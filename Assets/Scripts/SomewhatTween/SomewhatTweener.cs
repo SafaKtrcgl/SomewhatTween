@@ -38,7 +38,7 @@ namespace SomewhatTween
             return this;
         }
 
-        public void FireOnBegin()
+        internal void FireOnBegin()
         {
             _beginAction?.Invoke();
         }
@@ -50,7 +50,7 @@ namespace SomewhatTween
             return this;
         }
         
-        public void FireOnComplete()
+        internal void FireOnComplete()
         {
             _completeAction?.Invoke();
         }
@@ -74,7 +74,7 @@ namespace SomewhatTween
             return this;
         }
 
-        public float GetInterpolator(float normalizedTime)
+        internal float GetInterpolator(float normalizedTime)
         {
             return _easeCurve?.Evaluate(normalizedTime) ?? normalizedTime;
         }
